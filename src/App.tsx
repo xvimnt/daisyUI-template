@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import RoutesList from './components/Routes'
 import { Amplify } from "aws-amplify";
+import Footer from './components/Footer';
 
 Amplify.configure({
   Auth: {
@@ -15,6 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <RoutesList />
+      <Footer />
     </BrowserRouter>
   )
 }

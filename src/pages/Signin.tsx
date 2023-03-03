@@ -1,19 +1,15 @@
 import { Auth } from 'aws-amplify'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signInData, signInI } from '../common/data'
+import { signInData, signInDefaultState } from '../common/data'
 import { InputWithLabel } from '../components/InputWithLabel'
 
 export const Signin = () => {
 
-    const { title, fields, btnText } = signInData
+    const { title, fields, btnText, errorText } = signInData
 
-    const defaultState: signInI = {
-        email: '',
-        password: ''
-    }
     const [error, setError] = useState(false)
-    const [pageState, setPageState] = useState(defaultState)
+    const [pageState, setPageState] = useState(signInDefaultState)
     const navigate = useNavigate()
 
     const handleLogin = async (e: any) => {
@@ -29,37 +25,41 @@ export const Signin = () => {
     }
 
     return (
-        <div className='relative flex flex-col justify-center min-h-screen overflow-hidden items-center'>
+        <div className="hero min-h-screen bg-base-200">
             {error && (
                 <div className="toast toast-top toast-start">
                     <div className="alert alert-error">
                         <div>
-                            <span>Credenciales invalidas, intenta de nuevo.</span>
+                            <span>{errorText}</span>
                         </div>
                     </div>
                 </div>
             )}
-            <div className='rounded-3xl w-full p-6 m-auto border-t-4 shadow-md border-top lg:max-w-md bg-secondary/50'>
-                <h1 className="text-3xl font-bold text-center">{title}</h1>
-                <form className="p-6 justify-center items-center flex-col flex">
-                    {fields.map(element => {
-                        const { label, placeholder, id } = element
-                        const value = pageState[id]
-                        const handleChange = (e: any) => {
-                            pageState[id] = e.target.value
-                            setPageState({ ...pageState })
-                        }
-                        return (
-                            <InputWithLabel key={id} label={label} placeholder={placeholder} value={value} handleChange={handleChange} />
-                        )
-                    })}
-                    <button
-                        onClick={handleLogin}
-                        className="btn w-full mt-6 max-w-xs rounded-3xl">
-                        {btnText}
-                    </button>
-                </form>
+            <div className="hero-content flex-col lg:flex-row-reverse">
+                <div className="text-center lg:text-left">
+                    <h1 className="text-5xl font-bold">{title}</h1>
+                    <p className="py-6">Utiliza nuestra plataforma para agilizar tu negocio y obtener estadisticas inteligentes</p>
+                </div>
+                <div className="rounded-2xl card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div className="card-body">
+                        {fields.map(element => {
+                            const { label, placeholder, id } = element
+                            const value = pageState[id]
+                            const handleChange = (e: any) => {
+                                pageState[id] = e.target.value
+                                setPageState({ ...pageState })
+                            }
+                            return (
+                                <InputWithLabel key={id} label={label} placeholder={placeholder} value={value} handleChange={handleChange} />
+                            )
+                        })}
+                        <div className="form-control mt-6">
+                            <button className="btn btn-primary rounded-3xl" onClick={handleLogin}>{btnText}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
     )
 }
