@@ -14,7 +14,7 @@ export const InputWithLabel = (props: propsType) => {
             <input
                 value={value}
                 onChange={handleChange}
-                type="text" placeholder={placeholder} className="input input-bordered w-full max-w-xs rounded-3xl" />
+                type="text" placeholder={placeholder} className="input input-bordered input-primary w-full max-w-xs rounded-3xl" />
         </div>
     )
 }
