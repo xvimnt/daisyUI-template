@@ -1,15 +1,11 @@
-import { useState } from 'react'
-import './App.css'
-import Footer from './components/Footer'
-import Navbar from './components/Navbar'
+import { BrowserRouter } from 'react-router-dom'
+import RoutesList from './components/Routes'
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Footer />
-    </>
-
+    <BrowserRouter>
+      <RoutesList />
+    </BrowserRouter>
   )
 }
 
