@@ -1,4 +1,12 @@
+import { Auth } from "aws-amplify"
+import { useNavigate } from "react-router-dom"
+
 export default function Navbar() {
+    const navigate = useNavigate()
+    const handleLogout = async () => {
+        await Auth.signOut()
+        navigate('/')
+    }
     return (
         <>
             <div className="navbar bg-base-100">
@@ -23,7 +31,7 @@ export default function Navbar() {
                             </a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><button onClick={handleLogout}>Logout</button></li>
                     </ul>
                 </div>
             </div>

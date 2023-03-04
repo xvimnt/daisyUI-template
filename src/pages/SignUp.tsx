@@ -1,34 +1,42 @@
 import { Auth } from 'aws-amplify'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { signInData, signInDefaultState } from '../common/data'
+import { signUpData, signUpDefaultState } from '../common/data'
 import { InputWithLabel } from '../components/InputWithLabel'
 
-export const SignIn = () => {
+export const SignUp = () => {
 
-    const { title, subtitle, fields, btnText, errorText, forgotPasswordText, signUpText } = signInData
+    const { title, subtitle, fields, btnText, errorText, signInText } = signUpData
 
     const [error, setError] = useState(false)
-    const [pageState, setPageState] = useState(signInDefaultState)
+    const [pageState, setPageState] = useState(signUpDefaultState)
     const navigate = useNavigate()
-    useEffect(() => {
-        Auth.currentUserInfo().then((user) => {
-            if(user) {
-                navigate('home')
-            }
-        })
-    }, [])
 
-    const handleLogin = async (e: any) => {
+    const handleSignUp = async (e: any) => {
         e.preventDefault()
-        Auth.signIn(pageState.email, pageState.password).then(response => {
-            navigate('home')
-        }).catch(() => {
+        try {
+            if (pageState.password === pageState.confirmPassword) {
+                await Auth.signUp({
+                    username: pageState.email,
+                    password: pageState.password,
+                    attributes: {
+                      nickname: pageState.email,          // optional
+                      // other custom attributes 
+                    },
+                    autoSignIn: { // optional - enables auto sign in after user is confirmed
+                      enabled: true,
+                    }
+                  })
+                navigate(`/verify/${encodeURI(pageState.email)}`)
+            } else {
+                throw new Error()
+            }
+        } catch (e) {
             setError(true)
             setTimeout(() => {
                 setError(false)
             }, 4000)
-        })
+        }
     }
 
     return (
@@ -57,17 +65,14 @@ export const SignIn = () => {
                                 setPageState({ ...pageState })
                             }
                             return (
-                                <InputWithLabel type={type} key={id} label={label} placeholder={placeholder} value={value} handleChange={handleChange} />
+                                <InputWithLabel key={id} label={label} type={type} placeholder={placeholder} value={value} handleChange={handleChange} />
                             )
                         })}
                         <div className="form-control mt-6">
-                            <button className="btn btn-primary rounded-3xl" onClick={handleLogin}>{btnText}</button>
+                            <button className="btn btn-primary rounded-3xl" onClick={handleSignUp}>{btnText}</button>
                         </div>
-                        <Link to='signup' className='font-semibold text-secondary mt-4 text-center'>
-                            {signUpText}
-                        </Link>
-                        <Link to='forgot-password' className='font-semibold text-secondary text-center'>
-                            {forgotPasswordText}
+                        <Link to='/' className='font-semibold text-secondary mt-4 text-center'>
+                            {signInText}
                         </Link>
                     </div>
                 </div>
