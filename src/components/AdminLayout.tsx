@@ -15,6 +15,7 @@ export const AdminLayout = (props: propsType) => {
             if (!data.attributes || !data.attributes.email_verified) {
                 return Auth.signOut()
             }
+            else throw new Error()
         }).catch(() => {
             navigate('/')
         })
